@@ -1,5 +1,3 @@
-
-
 export default function NotFoundPage() {
   return (
     <main className="not-found">
