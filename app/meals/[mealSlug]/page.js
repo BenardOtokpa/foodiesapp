@@ -3,12 +3,24 @@ import classes from "./page.module.css";
 import { getMeal } from "@/lib/meals";
 import { notFound } from "next/navigation";
 
+export async function generateMetadata({ params }) {
+  const meal = await getMeal(params.mealSlug);
+  if (!meal) {
+    return {
+      title: "Meal Not Found",
+      description: "The requested meal could not be found.",
+    };
+  }
+  return {
+    title: meal.title,
+    description: meal.summary,
+  };
+}
+
 export default function MealDetailsPage({ params }) {
   const meal = getMeal(params.mealSlug);
   if (!meal) {
-    return (
-      notFound() // If meal not found, trigger 404 page
-    );
+    return notFound(); // If meal not found, trigger 404 page
   }
   meal.instructions = meal.instructions.replace(/\n/g, "<br />"); // Remove HTML tags
   return (
